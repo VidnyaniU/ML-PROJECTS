@@ -1,0 +1,144 @@
+---
+title: "US-Presedential-Elections-Simple-Linear-Regression-Analyisis"
+author: "Vidnyani Umathe MS2023"
+date: "2024-02-08"
+output: word_document
+---
+
+## Reading data from csv file
+```{r}
+votes <- read.csv('C:\\Users\\hp\\Desktop\\ISSC NOTES AND ASSIGNMENTS\\Sem 2\\Machine Learning\\MA Assignment\\us-presidential-elections-2000.csv', header = TRUE, comment = '#' )
+head(votes)
+```
+
+```{r}
+rownames( votes ) <- votes[,1]  # use first column to set row names for the data frame
+votes             <- votes[,-1] # remove first column
+head(votes)
+```
+
+```{r}
+n.cnddts <- ncol( votes ) # of candidates
+n.cnts   <- nrow( votes ) # of counties
+n.cnddts
+n.cnts
+```
+#Exploratory data analysis and visualization
+```{r}
+summary(votes)
+```
+
+## Scatter Plot
+```{r}
+plot(votes)
+votes[,c("Bush","Buc")]
+plot(votes$Bush,votes$Buc)
+```
+## BoxPlot
+```{r}
+boxplot(votes[,"Bush"])
+boxplot(votes[,"Buc"])
+```
+## Histogram
+```{r}
+hist(votes[,"Bush"])
+hist(votes[,"Buc"])
+```
+## Correlation matrix
+```{r}
+library(ggcorrplot)
+corr<-cor(votes)
+head(corr)
+#ggcorrplot(corr)
+ggcorrplot(corr,type = "lower", outline.color = "black",show.diag =TRUE,lab = TRUE, ggtheme = ggplot2::theme_minimal , colors = c("#6D9EC1","white","#E46726"))
+```
+
+# Log Transformation
+```{r}
+log.votes <- log( votes )
+head(log.votes)
+```
+## pair plots
+```{r}
+pairs( votes )
+pairs( log.votes )
+```
+```{r}
+summary(log.votes)
+```
+## BoxPlot
+```{r}
+boxplot(log.votes[,"Bush"])
+boxplot(log.votes[,"Buc"])
+```
+## Histogram
+```{r}
+hist(log.votes[,"Bush"])
+hist(log.votes[,"Buc"])
+```
+#Buc~Bush
+```{r}
+bush     <- votes[,'Bush']
+buc      <- votes[,'Buc']
+log.bush <- log( bush )
+log.buc  <- log( buc )
+```
+
+```{r}
+# to find indices of two extreme outliers in the buc ~ bush data
+out <- c( which( bush > 200000 ), which( buc  > 2000 ) )
+out
+```
+### Correlations 
+```{r}
+#with outliers
+cor.test( bush, buc )        
+cor.test( log.bush, log.buc ) 
+```
+```{r}
+#without outliers
+cor.test( bush[-out], buc[-out] )         # without outliers
+cor.test( log.bush[-out], log.buc[-out] ) # without outliers
+```
+
+##Buc~Bush Linear fits
+
+```{r}
+fit1 <- lm( buc ~ bush )     # with outliers
+summary(fit1)
+```
+```{r}
+plot( bush, buc, bty = 'n', main = 'Linear fit with outliers' )
+abline( coef( fit1 ), lty = 2 ,col='red')
+```
+
+
+```{r}
+fit2 <- lm( buc[-out] ~ bush[-out] )  # without outliers
+summary(fit2)
+```
+```{r}
+plot( bush[-out], buc[-out], bty = 'n', main = 'Linear fit without outliers' )
+abline( coef( fit2 ), lty = 2 ,col='blue')
+```
+## log( Buc ) ~ log( Bush ) linear fits
+```{r}
+# with outliers
+log.fit1 <- lm( log.buc ~ log.bush )           
+summary( log.fit1 ) 
+```
+
+```{r}
+plot( log.bush, log.buc, bty = 'n', main = 'Linear log.fit with outliers' )
+abline( coef( log.fit1 ), lty = 2 ,col='red')
+```
+```{r}
+# without outliers
+log.fit2 <- lm( log.buc[-out] ~ log.bush[-out] )           
+summary( log.fit2 )
+```
+```{r}
+plot( log.bush[-out], log.buc[-out], bty = 'n', main = 'Linear log.fit without outliers' )
+abline( coef( log.fit2 ), lty = 2 ,col='blue')
+```
+
