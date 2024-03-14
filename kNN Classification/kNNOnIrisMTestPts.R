@@ -1,4 +1,4 @@
-library (ggplot2)
+
 head(iris)
 col = c('blue','red','green')
 plot(Petal.Width~Sepal.Width,data=iris,col=col[unclass(iris$Species)])

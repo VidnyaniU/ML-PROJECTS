@@ -27,12 +27,12 @@ train.y = iris$Species
 n_test = nrow(iris)
 
 # vector to store the predicted classes
-predicted_classes = character(n_test)
+#predicted_classes = character(n_test)
 
 # Loop through each test point
 for (i in 1:n_test) {
   test_point = iris[i, c('Sepal.Width', 'Petal.Width')]
-  predicted_classes[i] =knn.classify(test_point, train.x, train.y, k)
+  n_test[i] =knn.classify(test_point, train.x, train.y, k)
 }
 
 # Calculate the accuracy
