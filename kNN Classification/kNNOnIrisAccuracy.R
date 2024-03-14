@@ -26,10 +26,7 @@ train.y = iris$Species
 # Define the number of test points
 n_test = nrow(iris)
 
-# vector to store the predicted classes
-#predicted_classes = character(n_test)
 
-# Loop through each test point
 for (i in 1:n_test) {
   test_point = iris[i, c('Sepal.Width', 'Petal.Width')]
   n_test[i] =knn.classify(test_point, train.x, train.y, k)
