@@ -6,7 +6,7 @@ plot(Petal.Width~Sepal.Width,data=iris,col=col[unclass(iris$Species)])
 #train and test 
 train.x = iris[,c('Sepal.Width','Petal.Width')]
 train.y = iris$Species
-test.x =c(3.5,0.2)
+
 k=7 #kNN
 ##################
 #function for kNN#
